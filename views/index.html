@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf8' />
+    <meta http-equiv='X-UA-Compatible', content='IE=edge, chrome=1' />
+    <meta name='description', content='description of your site' />
+    <meta name='author', content= "author of the site" />
+    <meta name="viewport" content="width=device-width">
+
+    <title>Weatherline</title>
+    <link rel='stylesheet' href='/css/main.css' />
+  </head>
+
+  <body>
+    <div class="fullscreen" id="main"></div>
+    <script data-main="js/main" src="js/require.js"></script>
+    <script>
+      protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://'; address = protocol + window.location.host + window.location.pathname + '/ws'; socket = new WebSocket(address); socket.onmessage = function(msg) { msg.data == 'reload' && window.location.reload() }
+    </script>
+  </body>
+
+</html>
