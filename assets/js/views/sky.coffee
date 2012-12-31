@@ -35,10 +35,10 @@ define ['./view', 'util/color'], (View, Color) ->
     updateBackground: () ->
       daylight = @sun.percentDaylight(@currentTime.time)
       if daylight < 0.5 
-        color = Color.colorLerp(@nightColor, @setColor, daylight)
+        color = Color.colorLerp(@nightColor, @setColor, daylight/0.5)
         @$el.addClass("night-sky").removeClass("day-sky")
       else
-        color = Color.colorLerp(@setColor, @dayColor, daylight)
+        color = Color.colorLerp(@setColor, @dayColor, (daylight-0.5)/0.5)
         @$el.addClass("day-sky").removeClass("night-sky")
       @$el.css('backgroundColor': "##{color.toString(16)}")
       @
