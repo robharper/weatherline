@@ -24,7 +24,10 @@ define (require) ->
 
     start: () ->
       mainEl = $('#main')
-      
+
+      $('body').on 'touchmove', (ev) ->
+        ev.preventDefault()
+
       panController = new PanController(
         el: mainEl
         model: @currentTime
