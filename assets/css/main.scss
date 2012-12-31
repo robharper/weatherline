@@ -16,19 +16,9 @@ body {
   right: 0;
   top: 0;
   bottom: 0;
+  overflow: hidden;
 }
 
-.date-time {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  
-  h1 {
-
-  }
-  h2 {
-
-  }
-}
+@import "views/sky";
+@import "views/satellites";
+@import "views/date-time";

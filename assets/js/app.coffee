@@ -14,6 +14,7 @@ define (require) ->
   # Views
   SkyView = require('views/sky')
   TimeView = require('views/timeDisplay')
+  SatelliteView = require('views/satellite')
 
   class App
     constructor: () ->
@@ -29,14 +30,13 @@ define (require) ->
         model: @currentTime
       )
 
-      # List of views for main display
-      views = [
-        new SkyView(
-          model: @sun
-          currentTime: @currentTime
-        ),
-        new TimeView( currentTime: @currentTime )
-      ]
+      skyView = new SkyView(
+        model: @sun
+        currentTime: @currentTime
+        childViews: [
+          new TimeView( currentTime: @currentTime )
+          new SatelliteView( model: @sun, currentTime: @currentTime )
+        ]
+      )
 
-      for view in views
-        view.render().addTo(mainEl)
+      skyView.render().addTo(mainEl)

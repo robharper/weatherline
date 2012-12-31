@@ -1,0 +1,26 @@
+.date-time {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  
+  h1 {
+
+  }
+  h2 {
+
+  }
+}
+
+.day-sky {
+  .date-time {
+    color: black;
+  }
+}
+
+.night-sky {
+  .date-time {
+    color: white;
+  }
+}
