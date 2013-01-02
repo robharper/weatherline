@@ -37,8 +37,8 @@ define (require) ->
         model: @sun
         currentTime: @currentTime
         childViews: [
-          new TimeView( currentTime: @currentTime )
           new SatelliteView( model: @sun, currentTime: @currentTime )
+          new TimeView( currentTime: @currentTime )
         ]
       )
 
