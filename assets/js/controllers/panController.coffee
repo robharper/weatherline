@@ -3,8 +3,8 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
   msPerPixel = 20000
 
   getTouch = (event) ->
-    if event.originalEvent.targetTouches?[0]?
-      event.originalEvent.targetTouches[0]
+    if event.originalEvent.touches?[0]?
+      event.originalEvent.touches[0]
     else
       event
 
@@ -19,17 +19,20 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
       @$el = $(options.el)
       @model = options.model
       @bindEvents()
-      @flickThreshold = 0.1
+
+      @settings = 
+        flickThreshold: 20000
+        flickEndSpeed: 100
+        flickUpdatePeriod: 1000/30
+        slowPanSpeed: 20000   # ms/pixel
+        fastPanSpeed: 200000  # ms/pixel
 
     startMove: (ev) =>
-      return if @move?
-
       @endMomentum()
       x = getTouch(ev).pageX
       @move = 
         x: x
         time: @model.time
-        history: [{x:x, time:ev.timeStamp}]
 
     pan: (ev) =>
       if @move?
@@ -38,9 +41,11 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
 
         # If two fingers, double the pan effect
         if ev.originalEvent.touches?.length > 1
-          distance *= 2
+          distance = distance * @settings.fastPanSpeed
+        else
+          distance = distance * @settings.slowPanSpeed
 
-        @model.setTime( @move.time - msPerPixel*distance )
+        @model.setTime( @move.time - distance )
 
         if @move.lastTime and ev.timeStamp != @move.lastTime
           @move.speed = (distance-@move.lastDistance) / (ev.timeStamp - @move.lastTime)
@@ -49,18 +54,22 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
         @move.lastDistance = distance
 
     endMove: (ev) =>
-      return if ev.originalEvent.touches?.length > 0
-      if Math.abs(@move.speed) > @flickThreshold
+      if ev.originalEvent.touches?.length > 0
+        @startMove(ev)
+        return
+
+      if Math.abs(@move.speed) > @settings.flickThreshold
+        console.log(@move.speed)
         @momentum = 
           speed: @move.speed
-          handle: setInterval(@continueMomentum, 1000/30)
+          handle: setInterval(@continueMomentum, @settings.flickUpdatePeriod)
 
       @move = null  
 
     continueMomentum: () =>
-      @model.setTime( @model.time - msPerPixel*@momentum.speed*1000/30 )
+      @model.setTime( @model.time - @momentum.speed*@settings.flickUpdatePeriod )
       @momentum.speed *= 0.9
-      @endMomentum() if Math.abs(@momentum.speed) < 0.1
+      @endMomentum() if Math.abs(@momentum.speed) < @settings.flickEndSpeed
 
     endMomentum: () ->
       clearInterval(@momentum.handle) if @momentum
