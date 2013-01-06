@@ -1,4 +1,7 @@
 define ['_', './model', 'util/celeste'], (_, Model, Celeste) ->
+
+  rad2Deg = 180/Math.PI
+  deg2Rad = Math.PI/180
   
   # Represents a physical model of the sun as seen
   # from a given position on earth
@@ -7,6 +10,7 @@ define ['_', './model', 'util/celeste'], (_, Model, Celeste) ->
     DEFAULTS:
       # Altitude of the sun at which time twilight ends
       twilightAngle: -6
+      sunDiameter: 0.545
 
 
     init: (data, options) ->
@@ -20,8 +24,9 @@ define ['_', './model', 'util/celeste'], (_, Model, Celeste) ->
       if newValues?
         @longitude = newValues.longitude
         @latitude = newValues.latitude
+        @
       else
-        return { latitude: @latitude, longitude: @longitude }
+        { latitude: @latitude, longitude: @longitude }
 
     # Returns an object containing altitude and azimuth of the sun
     # as seen from the observer's location
@@ -32,12 +37,13 @@ define ['_', './model', 'util/celeste'], (_, Model, Celeste) ->
       
       # Coordinate conversions
       equatorial = Celeste.eclipticToEquatorial(
-        longitude: meanLongitude / 180*Math.PI
+        longitude: meanLongitude * deg2Rad
         latitude: 0
       )
-      return Celeste.equatorialToHorizontal( _.extend(equatorial,
-        latitude: @latitude / 180*Math.PI
-        longitude: -@longitude / 180*Math.PI
+      
+      Celeste.equatorialToHorizontal( _.extend(equatorial,
+        latitude: @latitude * deg2Rad
+        longitude: -@longitude * deg2Rad
         utc: utc
       ))
 
@@ -45,10 +51,17 @@ define ['_', './model', 'util/celeste'], (_, Model, Celeste) ->
     # and values in between represent dawn/dusk semi-light
     percentDaylight: (utc) ->
       position = @skyPosition(utc)
-      altitude = position.altitude * 180/Math.PI
-      if altitude > 0
-        return 1
+      altitude = position.altitude * rad2Deg
+      if altitude > @options.sunDiameter
+        1
       else if altitude < @options.twilightAngle
-        return 0
+        0
       else
-        return (1 - altitude/@options.twilightAngle)
+        Math.cos((altitude-@options.sunDiameter)/(@options.twilightAngle-@options.sunDiameter) * Math.PI/2)
+
+    # Returns approximate closest solar noon to given date
+    solarNoon: (utc) ->
+      n = Celeste.unixDateToJulian(utc) - Celeste.J2000 + @longitude/360
+      n = Math.round(n + 0.5)
+      j = Celeste.J2000 - @longitude/360 + n
+      Celeste.julianDateToUnix(j)

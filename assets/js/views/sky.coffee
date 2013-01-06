@@ -34,13 +34,20 @@ define ['./view', 'util/color'], (View, Color) ->
 
     updateBackground: () ->
       daylight = @sun.percentDaylight(@currentTime.time)
+      zenithDaylight = Math.max(daylight - 0.2, 0)
+
       if daylight < 0.5 
-        color = Color.colorLerp(@nightColor, @setColor, daylight/0.5)
+        color1 = Color.colorLerp(@nightColor, @setColor, daylight/0.5)
         @$el.addClass("night-sky").removeClass("day-sky")
       else
-        color = Color.colorLerp(@setColor, @dayColor, (daylight-0.5)/0.5)
+        color1 = Color.colorLerp(@setColor, @dayColor, (daylight-0.5)/0.5)
         @$el.addClass("day-sky").removeClass("night-sky")
-      @$el.css('backgroundColor': "##{color.toString(16)}")
+
+      color2 = Color.colorLerp(@nightColor, @dayColor, zenithDaylight)
+
+      @$el.css('background': "##{color1.toString(16)}")
+      @$el.css('background': "-webkit-linear-gradient(top, ##{color2.toString(16)} 0%, ##{color1.toString(16)} 100%)")
+      @$el.css('background': "linear-gradient(to bottom,  ##{color2.toString(16)} 0%, ##{color1.toString(16)} 100%)")
       @
 
    
