@@ -6,9 +6,6 @@ require.config
       exports: '_'
     'moment':
       exports: 'moment'
-    'backbone': 
-      deps: ['_', '$']
-      exports: 'Backbone'
     'handlebars': 
       exports: 'Handlebars'
   paths:
@@ -16,7 +13,6 @@ require.config
     '$': 'components/jquery/jquery'
     '_': 'components/underscore/underscore'
     'moment': 'components/moment/moment'
-    'backbone': 'components/backbone/backbone'
     'handlebars': 'components/handlebars/handlebars-1.0.0-rc.1'
 
 # this will fire once the required scripts have been loaded

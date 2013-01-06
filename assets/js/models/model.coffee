@@ -1,10 +1,27 @@
-define ['backbone'], (Backbone) ->
+define ['_'], (_) ->
 
   class Model
+    _eventListeners : {}
+
     constructor: (data, options) ->
       _.extend(@, data || {})
       @init?(data, options)
 
-  _.extend(Model::, Backbone.Events)
+    on: (event, handler, context) ->
+      handlers = @_eventListeners[event] || []
+      return @ if handlers.indexOf(handler) >= 0
+      handlers.push({handler: handler, context: context})
+      @_eventListeners[event] = handlers
+      @
+
+    off: (event, handler, context) ->
+      @_eventListeners[event] = _.reject @_eventListeners, (desc) ->
+        desc.handler == handler || (!handler and desc.context == context)
+      @
+
+    trigger: (event, payload...) ->
+      for desc in (@_eventListeners[event] || [])
+        desc.handler.apply(desc.context, payload)
+      @
 
   Model
