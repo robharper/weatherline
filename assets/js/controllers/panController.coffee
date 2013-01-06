@@ -24,6 +24,7 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
         flickThreshold: 20000
         flickEndSpeed: 100
         flickUpdatePeriod: 1000/30
+        flickDecay: 0.8
         slowPanSpeed: 20000   # ms/pixel
         fastPanSpeed: 200000  # ms/pixel
 
@@ -59,7 +60,6 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
         return
 
       if Math.abs(@move.speed) > @settings.flickThreshold
-        console.log(@move.speed)
         @momentum = 
           speed: @move.speed
           handle: setInterval(@continueMomentum, @settings.flickUpdatePeriod)
@@ -68,7 +68,7 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
 
     continueMomentum: () =>
       @model.setTime( @model.time - @momentum.speed*@settings.flickUpdatePeriod )
-      @momentum.speed *= 0.9
+      @momentum.speed *= @settings.flickDecay
       @endMomentum() if Math.abs(@momentum.speed) < @settings.flickEndSpeed
 
     endMomentum: () ->
