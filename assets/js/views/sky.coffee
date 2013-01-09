@@ -33,7 +33,7 @@ define ['./view', 'util/color'], (View, Color) ->
       @
 
     updateBackground: () ->
-      daylight = @sun.percentDaylight(@currentTime.time)
+      daylight = @sun.percentDaylight(@currentTime.valueOf())
       zenithDaylight = Math.max(daylight - 0.2, 0)
 
       if daylight < 0.5 

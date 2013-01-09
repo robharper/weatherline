@@ -16,6 +16,8 @@ define (require) ->
   TimeView = require('views/timeDisplay')
   SatelliteView = require('views/satellite')
 
+  FlipView = require('views/pageFlip')
+
   class App
     constructor: () ->
       # Bootstrap some basic data for testing now
@@ -38,7 +40,12 @@ define (require) ->
         currentTime: @currentTime
         childViews: [
           new SatelliteView( model: @sun, currentTime: @currentTime )
-          new TimeView( currentTime: @currentTime )
+          new FlipView(
+            currentTime: @currentTime
+            viewFactory: (date) ->
+              new TimeView( date: date, currentTime: @currentTime )
+          )
+          
         ]
       )
 

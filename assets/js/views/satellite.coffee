@@ -23,11 +23,11 @@ define ['./view', 'util/fn', 'util/color'], (View, Fn, Color) ->
       @currentTime.off(null, null, @)
 
     render: () ->
-      altitude = @sun.skyPosition(@currentTime.time).altitude
-      highestToday = @sun.skyPosition( @sun.solarNoon(@currentTime.time) ).altitude
+      altitude = @sun.skyPosition(@currentTime.valueOf()).altitude
+      highestToday = @sun.skyPosition( @sun.solarNoon(@currentTime.valueOf()) ).altitude
 
       risePercent = altitude / highestToday
-      setPercent = 1 - @sun.percentDaylight(@currentTime.time)
+      setPercent = 1 - @sun.percentDaylight(@currentTime.valueOf())
       
       color = Color.colorLerp(@fullColor, @setColor, setPercent)
       color = "##{color.toString(16)}"
@@ -38,8 +38,7 @@ define ['./view', 'util/fn', 'util/color'], (View, Fn, Color) ->
       @$el.css(
         backgroundColor: color
         left: '50%'
-        # Deg -> pixels: sun diameter px = 6 deg --> size/6px = 1 deg
-        top:  "#{height - 0.75*height*risePercent - size}px"
+        top:  "#{100 - 75*risePercent}%"
         width: "#{2*size}px"
         height: "#{2*size}px"
         'border-radius': "#{size}px"

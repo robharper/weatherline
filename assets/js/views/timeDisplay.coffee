@@ -9,12 +9,13 @@ define ['handlebars','./view'], (Handlebars, View) ->
 
     init: (options) ->
       options ?= {}
+      @date = options.date
       @currentTime = options.currentTime
       @currentTime.on('change', @render, @)
 
     render: () ->
       @$el.html( @template(
-        date: @currentTime.format("MMMM Do YYYY")
+        date: @date.format("MMMM Do YYYY")
         time: @currentTime.format("H:mm:ss a")
       ))
       @
