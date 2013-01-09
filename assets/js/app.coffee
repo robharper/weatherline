@@ -5,7 +5,7 @@ define (require) ->
   # Models
   Days = require('models/days')
   Day = require('models/day')
-  CurrentTime = require('models/currentTime')
+  CurrentTime = require('models/momentModel')
   Sun = require('models/sun')
 
   # Controllers
