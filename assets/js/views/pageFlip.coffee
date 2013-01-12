@@ -6,65 +6,60 @@ define ['$', '_', './view', 'moment'], ($, _, View, moment) ->
 
     className: "fill"
 
-    DEFAULTS:
-      pageSize: 'day'
+    DEFAULTS: {}
 
     init: (options) ->
       @options = _.defaults(options || [], @DEFAULTS)
       @factory = options.viewFactory
+      @model = options.model
       
       @currentTime = options.currentTime
       @currentTime.on('change', @update, @)
       
     render: () ->
       # TODO Cleanup on rerender
-       
-      # Set begin and end of current page
-      @begin = moment(@currentTime.time).startOf(@options.pageSize)
-      @end = moment(@currentTime.time).endOf(@options.pageSize)
-
-      # Set zero point of slider
-      @zero = @begin
 
       @slider = $('<div></div>').addClass("flip-slider")
       @$el.empty().append(@slider)
 
-      # Create current, next and prev pages
-      @views = [
-        {idx:  0, view: @factory(@begin)}
-      ]
+      # Create current
+      @currentIdx = 0
+      @currentPage = @model.getPage(@currentTime.time)
+      @currentView = @factory(@currentPage)
 
-      for page in @views
-        page.view.render().$el.css(
-          position: 'absolute'
-          left: "#{page.idx*100}%"
-        )
-        @slider.append(page.view.$el)
+      @currentView.render().$el.css(
+        position: 'absolute'
+        left: "#{@currentIdx*100}%"
+      )
+      @slider.append(@currentView.$el)
 
       @
 
     update: () ->
       # If still within current page, do nothing
-      if @begin.valueOf() <= @currentTime.time <= @end.valueOf()
+      if @currentPage.begin.valueOf() <= @currentTime.time <= @currentPage.end.valueOf()
         return
 
       # Flip
-      @begin = moment(@currentTime.time).startOf(@options.pageSize)
-      @end = moment(@currentTime.time).endOf(@options.pageSize)
+      newPage = @model.getPage(@currentTime.time)
 
-      # If we don't have the view for this time period, create it
-      idx = @begin.diff(@zero, "#{@options.pageSize}s")
-      if !_.find( @views, (page) -> page.idx == idx )
-        view = @factory(@begin)
-        view.render().$el.css(
-          position: 'absolute'
-          left: "#{idx*100}%"
-        )
-        @slider.append(view.$el)
-        @views.push({idx: idx, view: view})
+      # Which direction do we move?
+      if newPage.begin.valueOf() < @currentPage.begin.valueOf()
+        @currentIdx -= 1
+      else
+        @currentIdx += 1
 
-      @slider.css("-webkit-transform": "translateX(#{-idx*100}%)")
+      view = @factory(newPage)
+      view.render().$el.css(
+        position: 'absolute'
+        left: "#{@currentIdx*100}%"
+      )
+      @slider.append(view.$el)
 
-      # TODO Remove old views
+      @slider.css("-webkit-transform": "translateX(#{-@currentIdx*100}%)")
 
-
+      # TODO Better removal logic
+      oldView = @currentView
+      @currentPage = newPage
+      @currentView = view
+      setTimeout((() -> oldView.dispose().remove()), 500)

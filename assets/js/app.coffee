@@ -3,8 +3,7 @@ define (require) ->
   moment = require('moment')
 
   # Models
-  Days = require('models/days')
-  Day = require('models/day')
+  FixedPage = require('models/fixedTimePage')
   CurrentTime = require('models/momentModel')
   Sun = require('models/sun')
 
@@ -43,9 +42,10 @@ define (require) ->
           new FlipView(
             id: "date-view"
             className: 'date-flip'
+            model: new FixedPage(pageSize: "day")
             currentTime: @currentTime
-            viewFactory: (date) ->
-              new TimeView( format: "MMM Do, YYYY", currentTime: date )
+            viewFactory: (page) ->
+              new TimeView( format: "MMM Do, YYYY", currentTime: page.begin )
           )
           new TimeView( id: "time-view", format: "HH:mm:ss", currentTime: @currentTime )
         ]
