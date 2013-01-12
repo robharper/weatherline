@@ -21,6 +21,7 @@ define ['./view', 'util/fn', 'util/color'], (View, Fn, Color) ->
 
     dispose: () ->
       @currentTime.off(null, null, @)
+      super()
 
     render: () ->
       altitude = @sun.skyPosition(@currentTime.valueOf()).altitude

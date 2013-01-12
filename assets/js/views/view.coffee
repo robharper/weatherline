@@ -22,8 +22,14 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
     $: (selector) ->
       $(selector, @$el)
 
+    remove: () ->
+      @dispose()
+      @$el.remove()
+      @
+
     dispose: () ->
       @unbindEvents()
+      @
 
     addTo: (el, replace) ->
       if replace

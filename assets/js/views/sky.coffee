@@ -30,6 +30,7 @@ define ['handlebars', './view', 'util/color'], (Handlebars, View, Color) ->
 
     dispose: () ->
       @currentTime.off(null, null, @)
+      super()
 
     render: () ->
       @$el.html(@template())

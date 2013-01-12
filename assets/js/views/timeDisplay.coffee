@@ -21,3 +21,4 @@ define ['handlebars','./view'], (Handlebars, View) ->
 
     dispose: () ->
       @currentTime.off?(null, null, @)
+      super()
