@@ -41,11 +41,13 @@ define (require) ->
         childViews: [
           new SatelliteView( model: @sun, currentTime: @currentTime )
           new FlipView(
+            id: "date-view"
+            className: 'date-flip'
             currentTime: @currentTime
             viewFactory: (date) ->
-              new TimeView( date: date, currentTime: @currentTime )
+              new TimeView( format: "MMM Do, YYYY", currentTime: date )
           )
-          
+          new TimeView( id: "time-view", format: "HH:mm:ss", currentTime: @currentTime )
         ]
       )
 

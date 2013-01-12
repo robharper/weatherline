@@ -1,7 +1,14 @@
-define ['./view', 'util/color'], (View, Color) ->
+define ['handlebars', './view', 'util/color'], (Handlebars, View, Color) ->
 
   class SkyView extends View
     className: 'sky'
+
+    template: Handlebars.compile("""
+      <div class="date-time">
+        <div id="date-view"></div>
+        <div id="time-view"></div>
+      </div>
+    """)
 
     DEFAULTS:
       dayColor:   0x99AAFF
@@ -25,10 +32,16 @@ define ['./view', 'util/color'], (View, Color) ->
       @currentTime.off(null, null, @)
 
     render: () ->
+      @$el.html(@template())
       @updateBackground()
 
+      # Ugly: inject children into parent view by finding containers that match view's id
       for child in @childViews
-        child.render().addTo(@$el)
+        container = @$("##{child.id}")
+        if container.length
+          child.setElement(container).render()
+        else
+          child.render().addTo(@$el)
 
       @
 

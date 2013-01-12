@@ -23,13 +23,21 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
       $(selector, @$el)
 
     dispose: () ->
-      unbindEvents()
+      @unbindEvents()
 
     addTo: (el, replace) ->
       if replace
         $(el).html(@$el)
       else
         $(el).append(@$el)
+      @
+
+    setElement: (el) ->
+      @unbindEvents()
+      @$el = $(el)
+      @$el.addClass(@className) if @className?
+      @$el.attr("id", @id) if @id?
+      @bindEvents()
       @
 
     remove: () ->
