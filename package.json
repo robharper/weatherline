@@ -1,0 +1,18 @@
+{
+  "name": "weatherline",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.0.x",
+    "jade": "latest",
+    "stylus": "latest",
+    "coffee-script": "latest",
+    "roots-express": "latest",
+    "connect-assets": "latest",
+    "xml2js": "latest",
+    "underscore": "latest"
+  }
+}
