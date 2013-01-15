@@ -6,6 +6,7 @@ define (require) ->
   FixedPage = require('models/fixedTimePage')
   CurrentTime = require('models/momentModel')
   Sun = require('models/sun')
+  ForecastPageModel = require('models/weatherForecastPages')
 
   # Controllers
   PanController = require('controllers/panController')
@@ -16,6 +17,8 @@ define (require) ->
   SatelliteView = require('views/satellite')
 
   FlipView = require('views/pageFlip')
+  WeatherView = require('views/weather')
+
 
   class App
     constructor: () ->
@@ -34,7 +37,7 @@ define (require) ->
         model: @currentTime
       )
 
-      skyView = new SkyView(
+      @skyView = new SkyView(
         model: @sun
         currentTime: @currentTime
         childViews: [
@@ -51,4 +54,14 @@ define (require) ->
         ]
       )
 
-      skyView.render().addTo(mainEl)
+      @skyView.render().addTo(mainEl)
+
+      $.ajax(
+        url: '/weather'
+      ).done (data) =>
+        view = new FlipView(
+          model: new ForecastPageModel(pages: data)
+          currentTime: @currentTime
+          viewFactory: (page) -> new WeatherView(symbol: page.symbol)
+        )
+        view.render().addTo(@skyView.$el)
