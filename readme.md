@@ -1,7 +1,11 @@
 Weatherline
 ===========
+> A tactile meteoroligical timeline web app
+
+
 
 ### Setup / Installation
-Uses roots.cx, run:
-    roots watch
+Requires node.js and npm, run:
+    npm install
+    node app
 
