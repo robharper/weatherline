@@ -15,13 +15,13 @@ var app = express();
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
-  app.set('views', __dirname + '/views');
+  app.set('views', __dirname + '/../views');
   app.set('view engine', 'jade');
   
   app.use(compiler({
     enabled : [ 'coffee', 'stylus' ],
-    src     : 'assets',
-    dest    : 'var'
+    src     : '../assets',
+    dest    : '../var'
   }));
   
   app.use(express.logger('dev'));
@@ -32,11 +32,11 @@ app.configure(function(){
 
   // Three places to find static files :(
   // Public
-  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(express.static(path.join(__dirname, '../public')));
   // Compiled styl / coffee
-  app.use(express.static(path.join(__dirname, 'var')));
+  app.use(express.static(path.join(__dirname, '../var')));
   // Straight-up no-compilation necessary assets like js libs
-  app.use(express.static(path.join(__dirname, 'assets')));
+  app.use(express.static(path.join(__dirname, '../assets')));
 });
 
 app.configure('development', function(){
