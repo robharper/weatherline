@@ -7,6 +7,7 @@ define (require) ->
   CurrentTime = require('models/observableMoment')
   Sun = require('models/sun')
   ForecastPageModel = require('models/periodPageModel')
+  InterpolatedModel = require('models/interpolatedModel')
 
   # Controllers
   PanController = require('controllers/panController')
@@ -18,6 +19,7 @@ define (require) ->
 
   FlipView = require('views/pageFlip')
   WeatherView = require('views/weather')
+  ValueView = require('views/value')
 
 
   class App
@@ -65,3 +67,10 @@ define (require) ->
           viewFactory: (page) -> new WeatherView(symbol: page.symbol) if page?
         )
         view.render().addTo(@skyView.$el)
+
+        tempView = new ValueView(
+          model: new InterpolatedModel(points: data.points)
+          currentTime: @currentTime
+          key: 'temperature'
+        )
+        tempView.render().addTo(@skyView.$el)
