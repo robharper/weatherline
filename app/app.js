@@ -20,8 +20,8 @@ app.configure(function(){
   
   app.use(compiler({
     enabled : [ 'coffee', 'stylus' ],
-    src     : '../assets',
-    dest    : '../var'
+    src     : path.join(__dirname, '../assets'),
+    dest    : path.join(__dirname, '../var')
   }));
   
   app.use(express.logger('dev'));
