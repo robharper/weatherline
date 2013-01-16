@@ -2,7 +2,7 @@
 # It is a generated model, not a true data storage
 define ['_','moment', './model'], (_, moment, Model) ->
 
-  class ForecastPageModel extends Model
+  class PeriodPageModel extends Model
 
     init: (options) ->
       @pages = _.map options.pages, (page) ->

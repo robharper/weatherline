@@ -4,9 +4,9 @@ define (require) ->
 
   # Models
   FixedPage = require('models/fixedTimePage')
-  CurrentTime = require('models/momentModel')
+  CurrentTime = require('models/observableMoment')
   Sun = require('models/sun')
-  ForecastPageModel = require('models/weatherForecastPages')
+  ForecastPageModel = require('models/periodPageModel')
 
   # Controllers
   PanController = require('controllers/panController')
@@ -60,8 +60,8 @@ define (require) ->
         url: '/weather'
       ).done (data) =>
         view = new FlipView(
-          model: new ForecastPageModel(pages: data)
+          model: new ForecastPageModel(pages: data.periods)
           currentTime: @currentTime
-          viewFactory: (page) -> new WeatherView(symbol: page.symbol)
+          viewFactory: (page) -> new WeatherView(symbol: page.symbol) if page?
         )
         view.render().addTo(@skyView.$el)
