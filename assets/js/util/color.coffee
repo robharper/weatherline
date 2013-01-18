@@ -12,3 +12,9 @@ define ['./fn'], (Fn) ->
       b = Color.colorHexToComponents(b)
       result = [Fn.lerp(a[0], b[0], ratio), Fn.lerp(a[1], b[1], ratio), Fn.lerp(a[2], b[2], ratio)]
       Color.colorComponentsToHex(result)
+
+    toCss: (color) ->
+      return unless color?
+      val = color.toString(16)
+      val = "0#{val}" while val.length < 6
+      "##{val}"

@@ -1,7 +1,7 @@
 define ['handlebars','./view'], (Handlebars, View) ->
 
   class TimeDisplayView extends View
-    className: 'date-time'
+    className: 'view'
     
     template: Handlebars.compile("""
       <h2>{{time}}</h2>

@@ -13,7 +13,19 @@
   </head>
 
   <body>
-    <div class="fullscreen" id="main"></div>
+    <div class="fullscreen" id="main">
+      <div id="view-sky" class="full">
+        <div id="view-sun" class="satellite"></div>
+        <div class="date-time">
+          <div id="view-date"></div>
+          <div id="view-time"></div>
+        </div>
+        <div class="current-conditions">
+          <div id="view-symbol"></div>
+          <div id="view-temperature"></div>
+        </div>
+      </div>
+    </div>
     <script data-main="js/main" src="js/require.js"></script>
     <script>
       protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://'; address = protocol + window.location.host + window.location.pathname + '/ws'; socket = new WebSocket(address); socket.onmessage = function(msg) { msg.data == 'reload' && window.location.reload() }

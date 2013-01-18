@@ -39,24 +39,27 @@ define (require) ->
         model: @currentTime
       )
 
-      @skyView = new SkyView(
+      skyView = new SkyView(
         model: @sun
         currentTime: @currentTime
-        childViews: [
-          new SatelliteView( model: @sun, currentTime: @currentTime )
-          new FlipView(
-            id: "date-view"
-            className: 'date-flip'
-            model: new FixedPage(pageSize: "day")
-            currentTime: @currentTime
-            viewFactory: (page) ->
-              new TimeView( format: "MMM Do, YYYY", currentTime: page.begin )
-          )
-          new TimeView( id: "time-view", format: "HH:mm:ss", currentTime: @currentTime )
-        ]
       )
+      skyView.setElement($('#view-sky')).render()
 
-      @skyView.render().addTo(mainEl)
+      sunView = new SatelliteView( model: @sun, currentTime: @currentTime )
+      sunView.setElement($('#view-sun')).render()
+
+      dateView = new FlipView(
+        id: "date-view"
+        className: 'date-flip'
+        model: new FixedPage(pageSize: "day")
+        currentTime: @currentTime
+        viewFactory: (page) ->
+          new TimeView( format: "MMM Do, YYYY", currentTime: page.begin )
+      )
+      dateView.setElement($('#view-date')).render()
+
+      timeView = new TimeView( id: "time-view", format: "HH:mm:ss", currentTime: @currentTime )
+      timeView.setElement($('#view-time')).render()
 
       $.ajax(
         url: '/weather'
@@ -66,11 +69,11 @@ define (require) ->
           currentTime: @currentTime
           viewFactory: (page) -> new WeatherView(symbol: page.symbol) if page?
         )
-        view.render().addTo(@skyView.$el)
+        view.setElement($('#view-symbol')).render()
 
         tempView = new ValueView(
           model: new InterpolatedModel(points: data.points)
           currentTime: @currentTime
           key: 'temperature'
         )
-        tempView.render().addTo(@skyView.$el)
+        tempView.setElement($('#view-temperature')).render()

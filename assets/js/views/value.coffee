@@ -1,6 +1,8 @@
 define ['handlebars','./view'], (Handlebars, View) ->
 
   class ValueView extends View
+    className: 'view'
+
     template: Handlebars.compile("""
       <h2>{{value}}</h2>
     """)

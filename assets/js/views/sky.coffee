@@ -1,19 +1,15 @@
-define ['handlebars', './view', 'util/color'], (Handlebars, View, Color) ->
+define ['./view', 'util/color'], (View, Color) ->
 
   class SkyView extends View
     className: 'sky'
 
-    template: Handlebars.compile("""
-      <div class="date-time">
-        <div id="date-view"></div>
-        <div id="time-view"></div>
-      </div>
-    """)
-
     DEFAULTS:
       dayColor:   0x99AAFF
+      dayColorTop:   0x7790E0
       setColor:   0xFFAAAA
       nightColor: 0x110022
+      nightColorTop: 0x070012
+
 
     init: (options) ->
       options = _.defaults(options || {}, @DEFAULTS)
@@ -23,7 +19,9 @@ define ['handlebars', './view', 'util/color'], (Handlebars, View, Color) ->
       @currentTime.on('change', @updateBackground, @)
 
       @dayColor = options.dayColor
+      @dayColorTop = options.dayColorTop
       @nightColor = options.nightColor
+      @nightColorTop = options.nightColorTop
       @setColor = options.setColor
 
       @childViews = options.childViews || []
@@ -33,7 +31,6 @@ define ['handlebars', './view', 'util/color'], (Handlebars, View, Color) ->
       super()
 
     render: () ->
-      @$el.html(@template())
       @updateBackground()
 
       # Ugly: inject children into parent view by finding containers that match view's id
@@ -57,11 +54,11 @@ define ['handlebars', './view', 'util/color'], (Handlebars, View, Color) ->
         color1 = Color.colorLerp(@setColor, @dayColor, (daylight-0.5)/0.5)
         @$el.addClass("day-sky").removeClass("night-sky")
 
-      color2 = Color.colorLerp(@nightColor, @dayColor, zenithDaylight)
+      color2 = Color.colorLerp(@nightColorTop, @dayColorTop, zenithDaylight)
 
-      @$el.css('background': "##{color1.toString(16)}")
-      @$el.css('background': "-webkit-linear-gradient(top, ##{color2.toString(16)} 0%, ##{color1.toString(16)} 100%)")
-      @$el.css('background': "linear-gradient(to bottom,  ##{color2.toString(16)} 0%, ##{color1.toString(16)} 100%)")
+      @$el.css('background': Color.toCss(color1))
+      @$el.css('background': "-webkit-linear-gradient(top, #{Color.toCss(color2)} 0%, #{Color.toCss(color1)} 100%)")
+      @$el.css('background': "linear-gradient(to bottom,  #{Color.toCss(color2)} 0%, #{Color.toCss(color1)} 100%)")
       @
 
    

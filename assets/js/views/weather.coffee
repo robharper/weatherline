@@ -1,7 +1,7 @@
 define ['handlebars', './view'], (Handlerbars, View) ->
 
   class WeatherView extends View
-    className: 'date-time'
+    className: 'view'
     
     template: Handlebars.compile("""
       <h2>{{symbol}}</h2>
