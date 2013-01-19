@@ -1,18 +1,12 @@
-define ['handlebars', './view'], (Handlerbars, View) ->
+define ['./view'], (View) ->
 
   class WeatherView extends View
-    className: 'view'
-    
-    template: Handlebars.compile("""
-      <h2>{{symbol}}</h2>
-    """)
+    className: 'weather symbol'
 
     init: (options) ->
       options ?= {}
       @symbol = options.symbol
 
     render: () ->
-      @$el.html( @template(
-        symbol: @symbol
-      ))
+      @$el.addClass("#{@symbol.toLowerCase()}")
       @
