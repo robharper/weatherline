@@ -45,6 +45,7 @@ exports.weather = (req, res) ->
     result.points.push(
       time: record.$.from,
       temperature: record.location?[0].temperature?[0].$
+      temperature: record.location?[0].temperature?[0].$
     )
   )
 

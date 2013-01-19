@@ -1,10 +1,15 @@
 define ['handlebars','./view'], (Handlebars, View) ->
 
+  # Displays a value given by the model for the current time
+  # XXX Fixed to temperature for now...
   class ValueView extends View
     className: 'view'
 
     template: Handlebars.compile("""
-      <h2>{{value}}</h2>
+      <h2>
+        <span class="value">{{value}}</span>
+        <span class="unit">&deg;C</span>
+      </h2>
     """)
 
     init: (options) ->

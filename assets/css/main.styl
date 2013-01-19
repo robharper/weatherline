@@ -1,3 +1,10 @@
+// Basic Reset
+
+h1,h2,h3 {
+  margin: 0;
+  padding: 0;
+}
+
 html {
   width: 100%;
   height: 100%;
@@ -8,6 +15,11 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
+  background: black;
+  font-family: HelveticaNeue, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
 .fill {
@@ -24,32 +36,72 @@ body {
   overflow: hidden;
 }
 
-@import "views/pageFlip";
-@import "views/sky";
-@import "views/satellites";
-@import "views/date-time";
-
-
-.date-flip {
-  margin-top: 50%;
-  height: 70px;
-}
-
 .view {
   width: 100%;
   text-align: center;
-  font-family: sans-serif;  
   -webkit-transform: translate(0);
 }
 
-.day-sky {
-  .view {
-    color: black;
+
+@import "views/pageFlip";
+@import "views/sky";
+@import "views/satellites";
+@import "views/symbol";
+
+.day {
+  color: #333;
+}
+
+.night {
+  color: white;
+}
+
+
+// Layout
+.current-conditions {
+  position: relative;
+  margin-top: 10%;
+  width: 100%;
+
+  #view-symbol {
+    width: 100%;
+    height: 150px;
+  }
+  #view-temperature {
   }
 }
 
-.night-sky {
-  .view {
-    color: white;
+.date-time {
+  position: absolute;
+  width: 100%;
+  height: 80px;
+  bottom: 10px;
+
+  #time-view {
+    position: absolute;
+    height: 40px;
+    top: 0;
+  }
+  #date-view {
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    bottom: 0;
+  }
+}
+
+// Aesthetic - MOVE
+#date-view {
+  font-size: 15px;
+}
+#view-temperature {
+  .value {
+    font-size: 40px;
+  }
+  .unit {
+    line-height: 40px;
+    vertical-align: text-top;
+    position: absolute;
+    font-weight: normal;
   }
 }

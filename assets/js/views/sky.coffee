@@ -44,15 +44,22 @@ define ['./view', 'util/color'], (View, Color) ->
       @
 
     updateBackground: () ->
-      daylight = @sun.percentDaylight(@currentTime.valueOf())
+      elevation = @sun.skyPosition(@currentTime.valueOf()).altitude * 180/Math.PI
+      daylight = if elevation > 6
+          1
+        else if elevation < -6 
+          0
+        else
+          Math.cos((elevation-6)/-12 * Math.PI/2)
+      # daylight = @sun.percentDaylight(@currentTime.valueOf())
       zenithDaylight = Math.max(daylight - 0.2, 0)
 
       if daylight < 0.5 
         color1 = Color.colorLerp(@nightColor, @setColor, daylight/0.5)
-        @$el.addClass("night-sky").removeClass("day-sky")
+        @$el.addClass("night").removeClass("day")
       else
         color1 = Color.colorLerp(@setColor, @dayColor, (daylight-0.5)/0.5)
-        @$el.addClass("day-sky").removeClass("night-sky")
+        @$el.addClass("day").removeClass("night")
 
       color2 = Color.colorLerp(@nightColorTop, @dayColorTop, zenithDaylight)
 
