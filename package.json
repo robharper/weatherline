@@ -6,8 +6,11 @@
     "start": "node app/app"
   },
   "dependencies": {
+    "glob": "latest",
+    "fs-extra": "latest",
+    "async": "latest",
     "express": "3.0.x",
-    "jade": "latest",
+    "ejs": "*",
     "stylus": "latest",
     "coffee-script": "latest",
     "connect-compiler": "latest",

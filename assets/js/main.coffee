@@ -10,10 +10,10 @@ require.config
       exports: 'Handlebars'
   paths:
     # '$': 'components/zepto/zepto'
-    '$': 'components/jquery/jquery'
-    '_': 'components/underscore/underscore'
-    'moment': 'components/moment/moment'
-    'handlebars': 'components/handlebars/handlebars-1.0.0-rc.1'
+    '$': 'vendor/jquery'
+    '_': 'vendor/underscore'
+    'moment': 'vendor/moment'
+    'handlebars': 'vendor/handlebars-1.0.0-rc.1'
 
 # this will fire once the required scripts have been loaded
 require ['app'], (App) ->

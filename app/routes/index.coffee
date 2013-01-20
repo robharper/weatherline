@@ -2,7 +2,10 @@ xml2js = require('xml2js');
 http = require('http');
 _ = require('underscore');
 
-# Request once on startup for now (avoid too many requests during dev)
+
+exports.index = (req, res) ->
+  res.render('index', {})
+
 
 # Simple endpoint returns formatted weather data
 exports.weather = (req, res) ->
