@@ -19,7 +19,7 @@ buildCs = (callback) ->
   coffee.stderr.on 'data', (data) ->
     process.stderr.write data.toString()
   coffee.stdout.on 'data', (data) ->
-    print data.toString()
+    console.log data.toString()
   coffee.on 'exit', (code) ->
     callback?() if code is 0
 
@@ -27,11 +27,16 @@ copyStatic = (callback) ->
   console.log("Copying")
   # Clean this up - needlessly copying js, use r.js full site build and copy all but .coffee
   glob("./assets/**/@(*.js|*.ico|*.png)", (er, files) ->
+    console.log er if er?
     async.forEach(files, (file, done) ->
       dest = "./public/#{file[9..-1]}"
       async.series([
-        (callback) -> fsx.mkdirs( path.dirname(dest), callback ) 
-        (callback) -> fsx.copy(file, dest, callback)
+        (callback,err) -> 
+          console.log err if err?
+          fsx.mkdirs( path.dirname(dest), callback ) 
+        (callback,err) -> 
+          console.log err if err?
+          fsx.copy(file, dest, callback)
       ], done)
     , callback)
   )
@@ -60,7 +65,7 @@ optimize = (callback) ->
     
 
   requirejs.optimize(config, (buildResponse) ->
-    # var contents = fs.readFileSync(config.out, 'utf8');
+    console.log("...built")
     callback()
   , (err) ->
     console.log(err)
