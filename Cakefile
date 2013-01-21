@@ -71,6 +71,16 @@ optimize = (callback) ->
     console.log(err)
   )
 
+stream = (command, options, callback) ->
+  sub = spawn command, options
+  sub.stdout.on 'data', (data) -> print data.toString()
+  sub.stderr.on 'data', (data) -> print data.toString()
+  sub.on 'exit', (status) -> callback?() if status is 0
+  sub
+
+start = ->
+  stream 'node', ['app/app.js']
+
 task 'build:clean', 'Clean out public', ->
   clean()
 
@@ -89,4 +99,16 @@ task 'build', 'Build entire project', ->
     (callback) -> buildCs(callback)
     (callback) -> copyStatic(callback)
     (callback) -> optimize(callback)
+  ])
+
+task 'start', 'Start the app', ->
+  start()
+
+task 'go', 'Build and then start', ->
+  async.series([
+    (callback) -> clean(callback)
+    (callback) -> buildCs(callback)
+    (callback) -> copyStatic(callback)
+    (callback) -> optimize(callback)
+    (callback) -> start()
   ])

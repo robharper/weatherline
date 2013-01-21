@@ -1,1 +1,1 @@
-web: node app/app.js
+web: cake go
