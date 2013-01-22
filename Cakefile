@@ -104,7 +104,7 @@ task 'build', 'Build entire project', ->
 task 'start', 'Start the app', ->
   start()
 
-task 'go', 'Build and then start', ->
+task 'build-and-start', 'Build and then start', ->
   async.series([
     (callback) -> clean(callback)
     (callback) -> buildCs(callback)

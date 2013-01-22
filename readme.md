@@ -11,8 +11,6 @@ Requires node.js and npm, run:
 
 ### To Do
 
- - Layout template delivered in index (or view) and filled in by JS (instead of weak container)
- - Symbol view
  - Styling
  - Responsive
  - Location aware (and controllable)

@@ -1,1 +1,1 @@
-web: cake go
+web: cake build-and-start
