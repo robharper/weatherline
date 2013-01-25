@@ -1,0 +1,94 @@
+@font-face {
+    font-family: 'MeteoconsRegular';
+    src: url('fonts/meteocons-webfont.eot');
+    src: url('fonts/meteocons-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/meteocons-webfont.woff') format('woff'),
+         url('fonts/meteocons-webfont.ttf') format('truetype'),
+         url('fonts/meteocons-webfont.svg#MeteoconsRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.symbol {
+  font-family: 'MeteoconsRegular';
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  display: inline;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  vertical-align: baseline;
+
+  &.sun:before {
+    content: 'B';
+  }
+
+  &.lightcloud:before {
+    content: 'H';
+  }
+
+  &.partlycloud:before {
+    content: 'N';
+  }
+
+  &.cloud:before {
+    content: 'Y';
+  }
+
+  &.lightrainsun:before {
+    content: 'Q';
+  }
+
+  &.lightrunthundersun:before {
+    content: 'O';
+  }
+
+  &.sleetsun:before {
+    content: 'X';
+  }
+
+  &.snowsun:before {
+    content: 'U';
+  }
+
+  &.lightrain:before {
+    content: 'Q';
+  }
+
+  &.rain:before {
+    content: 'R';
+  }
+
+  &.rainthunder:before {
+    content: 'Z';
+  }
+
+  &.sleet:before {
+    content: 'X';
+  }
+
+  &.snow:before {
+    content: 'W';
+  }
+
+  &.snowthunder:before {
+    content: 'W';
+  }
+
+   &.fog:before {
+    content: 'M';
+  }
+}
+
+.night .symbol {
+  &.sun:before {
+    content: 'C';
+  }
+
+  &.lightcloud:before {
+    content: 'I';
+  }
+}

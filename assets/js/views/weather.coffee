@@ -1,12 +1,13 @@
-define ['./view'], (View) ->
+define ['$', './view'], ($, View) ->
 
   class WeatherView extends View
-    className: 'weather symbol'
+    className: 'weather'
 
     init: (options) ->
       options ?= {}
       @symbol = options.symbol
 
     render: () ->
-      @$el.addClass("#{@symbol.toLowerCase()}")
+      $('<span>').addClass("symbol #{@symbol.toLowerCase()}")
+        .appendTo(@$el)
       @

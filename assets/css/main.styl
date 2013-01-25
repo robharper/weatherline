@@ -1,19 +1,18 @@
 // Basic Reset
 
+
 h1,h2,h3 {
   margin: 0;
   padding: 0;
+  pointer-events: none;
 }
 
 html {
-  width: 100%;
-  height: 100%;
   font-size: 62.5%;
+  overflow: hidden;
 }
 
 body {
-  width: 100%;
-  height: 100%;
   padding: 0;
   margin: 0;
   background: black;
@@ -22,6 +21,7 @@ body {
   overflow: hidden;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  user-select: none;
 }
 
 
@@ -42,14 +42,13 @@ body {
 .view {
   width: 100%;
   text-align: center;
-  -webkit-transform: translate(0);
 }
 
 
 @import "views/pageFlip";
 @import "views/sky";
 @import "views/satellites";
-@import "views/symbol";
+@import "weather";
 
 .day {
   color: #333;
@@ -69,6 +68,12 @@ body {
   #view-symbol {
     width: 100%;
     height: 150px;
+    .weather {
+      width: 100%;
+      height: 100%;
+      font-size: 128px;
+      text-align: center;
+    }
   }
   #view-temperature {
   }
