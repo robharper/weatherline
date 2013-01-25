@@ -26,7 +26,7 @@ buildCs = (callback) ->
 copyStatic = (callback) ->
   console.log("Copying")
   # Clean this up - needlessly copying js, use r.js full site build and copy all but .coffee
-  glob("./assets/**/@(*.js|*.ico|*.png)", (er, files) ->
+  glob("./assets/**/@(*.js|*.ico|*.ttf|*.woff|*.svg|*.eot)", (er, files) ->
     console.log er if er?
     async.forEach(files, (file, done) ->
       dest = "./public/#{file[9..-1]}"
