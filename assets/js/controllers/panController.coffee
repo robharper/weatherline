@@ -11,6 +11,7 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
   class PanController
 
     events:
+      "touchstart #time-now": "goToNow"
       "touchstart": "startMove"
       "touchmove": "pan"
       "touchend": "endMove"
@@ -28,12 +29,20 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
         slowPanSpeed: 20000   # ms/pixel
         fastPanSpeed: 200000  # ms/pixel
 
+    goToNow: (ev) =>
+      ev.preventDefault()
+      ev.stopPropagation()
+      @model.setTime( Date.now() )
+
     startMove: (ev) =>
+      ev.preventDefault()
+      ev.stopPropagation()
       @endMomentum()
       x = getTouch(ev).pageX
       @move = 
         x: x
         time: @model.time
+      false
 
     pan: (ev) =>
       if @move?
@@ -54,10 +63,16 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
         @move.lastTime = ev.timeStamp
         @move.lastDistance = distance
 
+        ev.preventDefault()
+        ev.stopPropagation()
+      false
+
     endMove: (ev) =>
       if ev.originalEvent.touches?.length > 0
         @startMove(ev)
         return
+
+      return unless @move?
 
       if Math.abs(@move.speed) > @settings.flickThreshold
         @momentum = 
