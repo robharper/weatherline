@@ -6,7 +6,8 @@ define (require) ->
   FixedPage = require('models/fixedTimePage')
   CurrentTime = require('models/observableMoment')
   Sun = require('models/sun')
-  ForecastPageModel = require('models/periodPageModel')
+  AsyncForecastModel = require('models/asyncForecastModel')
+  ForecastPageModel = require('models/forecastPageModel')
   InterpolatedModel = require('models/interpolatedModel')
 
   # Controllers
@@ -71,22 +72,18 @@ define (require) ->
 
       # TODO Create view immediately, make model load data and notify when ready
       @location (lat, lon) =>
-        $.ajax(
-          url: '/weather'
-          data:
-            lat: lat
-            lon: lon
-        ).done (data) =>
-          view = new FlipView(
-            model: new ForecastPageModel(pages: data.periods)
-            currentTime: @currentTime
-            viewFactory: (page) -> new WeatherView(symbol: page.symbol) if page?
-          )
-          view.setElement($('#view-symbol')).render()
+        @forecastModel = new AsyncForecastModel(lat: lat, lon: lon)
+        
+        view = new FlipView(
+          model: new ForecastPageModel(model: @forecastModel)
+          currentTime: @currentTime
+          viewFactory: (page) -> new WeatherView(symbol: page.symbol.id) if page?
+        )
+        view.setElement($('#view-symbol')).render()
 
-          tempView = new ValueView(
-            model: new InterpolatedModel(points: data.points)
-            currentTime: @currentTime
-            key: 'temperature'
-          )
-          tempView.setElement($('#view-temperature')).render()
+        tempView = new ValueView(
+          model: new InterpolatedModel(model: @forecastModel)
+          currentTime: @currentTime
+          key: 'temperature'
+        )
+        tempView.setElement($('#view-temperature')).render()

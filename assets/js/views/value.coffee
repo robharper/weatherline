@@ -16,14 +16,20 @@ define ['handlebars','./view'], (Handlebars, View) ->
       @key = options.key
       @model = options.model
       @currentTime = options.currentTime
-      @currentTime.on("change", @render, @)
+      @currentTime.on('change', @render, @)
+      @model.on('change', @render, @)
 
     render: () ->
-      @$el.html( @template(
-        value: @model.getValue(@currentTime, @key).toFixed(1) 
-      ) )
+      value = @model.getValue(@currentTime, @key)
+      if value?
+        @$el.html( @template(
+          value: value.toFixed(1) 
+        ) )
+      else
+        @$el.empty()
       @
 
     dispose: () ->
       super()
       @currentTime.off(null, null, @)
+      @model.off(null, null, @)

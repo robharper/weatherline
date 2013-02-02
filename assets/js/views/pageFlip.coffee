@@ -17,6 +17,9 @@ define ['$', '_', './view', 'moment'], ($, _, View, moment) ->
       
       @currentTime = options.currentTime
       @currentTime.on('change', @update, @)
+
+      @model.on('change', () => @update(true), @)
+      
       
     render: () ->
       # TODO Cleanup on rerender
@@ -26,9 +29,9 @@ define ['$', '_', './view', 'moment'], ($, _, View, moment) ->
       @update()
       @
 
-    update: () ->
+    update: (force) ->
       # If still within current page, do nothing
-      unless @currentPage? and @currentPage.begin.valueOf() <= @currentTime.time <= @currentPage.end.valueOf()
+      unless !force && @currentPage? and @currentPage.begin.valueOf() <= @currentTime.time <= @currentPage.end.valueOf()
         # Outside current page or no current page
         newPage = @model.getPage(@currentTime)
 
@@ -60,3 +63,7 @@ define ['$', '_', './view', 'moment'], ($, _, View, moment) ->
         setTimeout((() -> oldView.dispose().remove()), 500) if oldView?
 
       @lastSeen = @currentTime.valueOf()
+
+    dispose: () ->
+      @model.off(null, null, @)
+      @currentTime.off(null, null, @)

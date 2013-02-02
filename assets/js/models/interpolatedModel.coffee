@@ -5,14 +5,22 @@ define ['_', './model', 'util/fn'], (_, Model, Fn) ->
   class InterpolatedModel extends Model
 
     init: (options) ->
+      @forecastData = options.model
+      @forecastData.on('change', @setData, @)
+      @setData(@forecastData)
+
+    setData: (forecastModel) ->
+      return unless forecastModel?
       # Convert time to millis past epoch
-      @points = _.map options.points, (point) ->
+      @points = _.map forecastModel.get('points'), (point) ->
         point.time = moment(point.time).valueOf()
         point
       @points = _.sortBy @points, (point) -> point.time
+      @trigger('')
 
     # Given a time (moment) and a value key, returns the interpolated value
     getValue: (time, key) ->
+      return unless @points? and @points.length > 0
       idx = _.sortedIndex @points, {time: time.valueOf()}, (point) -> point.time
       if idx == 0
         # Beginning

@@ -1,10 +1,10 @@
 define ['_'], (_) ->
 
   class Model
-    _eventListeners : {}
-
+    
     constructor: (data, options) ->
       _.extend(@, data || {})
+      @_eventListeners = {}
       @init?(data, options)
 
     on: (event, handler, context) ->
