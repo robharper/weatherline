@@ -26,11 +26,17 @@
           <div id="view-date"></div>
           <div id="view-time"></div>
         </div>
-
-        <footer>
-          <div id="time-now"><i class="icon-time"></i></div>
-        </footer>
       </div>
+      <footer>
+        <div class="reveal">
+          <span><i class="icon-double-angle-up"></i></span>
+        </div>
+        <div class="toolbar">
+          <span id="tools-location"><i class="icon-map-marker"></i></span> 
+          <span id="tools-now"><i class="icon-time"></i></span>
+          <span id="tools-info"><i class="icon-info-sign"></i></span>
+        </div>
+      </footer>
     </div>
     <script data-main="js/main" src="js/require.js"></script>
     <% if (settings.env === 'development') { %>

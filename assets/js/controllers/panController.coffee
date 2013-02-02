@@ -11,7 +11,6 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
   class PanController
 
     events:
-      "touchstart #time-now": "goToNow"
       "touchstart": "startMove"
       "touchmove": "pan"
       "touchend": "endMove"
@@ -28,11 +27,6 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
         flickDecay: 0.8
         slowPanSpeed: 20000   # ms/pixel
         fastPanSpeed: 200000  # ms/pixel
-
-    goToNow: (ev) =>
-      ev.preventDefault()
-      ev.stopPropagation()
-      @model.setTime( Date.now() )
 
     startMove: (ev) =>
       ev.preventDefault()

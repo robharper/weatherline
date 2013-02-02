@@ -12,6 +12,7 @@ define (require) ->
 
   # Controllers
   PanController = require('controllers/panController')
+  FooterController = require('controllers/footerController')
   
   # Views
   SkyView = require('views/sky')
@@ -50,6 +51,12 @@ define (require) ->
         el: mainEl
         model: @currentTime
       )
+
+      footerController = new FooterController(
+        el: $('footer')
+        currentTime: @currentTime
+      )
+
 
       skyView = new SkyView(
         model: @sun
