@@ -16,9 +16,9 @@ define ['$', '_', './view', 'moment'], ($, _, View, moment) ->
       @model = options.model
       
       @currentTime = options.currentTime
-      @currentTime.on('change', @update, @)
+      @currentTime.on('change', (() => @update(false)), @)
 
-      @model.on('change', () => @update(true), @)
+      @model.on('change', (() => @update(true)), @)
       
       
     render: () ->
@@ -65,5 +65,6 @@ define ['$', '_', './view', 'moment'], ($, _, View, moment) ->
       @lastSeen = @currentTime.valueOf()
 
     dispose: () ->
+      super()
       @model.off(null, null, @)
       @currentTime.off(null, null, @)

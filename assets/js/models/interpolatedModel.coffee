@@ -16,7 +16,7 @@ define ['_', './model', 'util/fn'], (_, Model, Fn) ->
         point.time = moment(point.time).valueOf()
         point
       @points = _.sortBy @points, (point) -> point.time
-      @trigger('')
+      @trigger('change')
 
     # Given a time (moment) and a value key, returns the interpolated value
     getValue: (time, key) ->

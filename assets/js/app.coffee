@@ -22,20 +22,23 @@ define (require) ->
   WeatherView = require('views/weather')
   ValueView = require('views/value')
 
+  DEFAULT_LOCATION =
+    lat: 43
+    lon: -79
 
   class App
     constructor: () ->
       # Bootstrap some basic data for testing now
       @currentTime = new CurrentTime()
-      @sun = new Sun(longitude: -79, latitude: 43)
+      @sun = new Sun(DEFAULT_LOCATION)
 
-    location: (cb) ->
+    determineLocation: (cb) ->
       if navigator.geolocation
         navigator.geolocation.getCurrentPosition (position) ->
           cb(position.coords.latitude, position.coords.longitude)
       else
         # XXX No geolocation fix to Toronto
-        cb(43, -79)
+        cb(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lon)
       
     start: () ->
       mainEl = $('#main')
@@ -70,20 +73,23 @@ define (require) ->
       timeView = new TimeView( id: "time-view", format: "HH:mm:ss", currentTime: @currentTime )
       timeView.setElement($('#view-time')).render()
 
-      # TODO Create view immediately, make model load data and notify when ready
-      @location (lat, lon) =>
-        @forecastModel = new AsyncForecastModel(lat: lat, lon: lon)
-        
-        view = new FlipView(
-          model: new ForecastPageModel(model: @forecastModel)
-          currentTime: @currentTime
-          viewFactory: (page) -> new WeatherView(symbol: page.symbol.id) if page?
-        )
-        view.setElement($('#view-symbol')).render()
+      @determineLocation( @setLocation )
 
-        tempView = new ValueView(
-          model: new InterpolatedModel(model: @forecastModel)
-          currentTime: @currentTime
-          key: 'temperature'
-        )
-        tempView.setElement($('#view-temperature')).render()
+    setLocation: (lat, lon) =>
+      @sun.observer(lat: lat, lon: lon)
+      @forecastModel = new AsyncForecastModel(lat: lat, lon: lon)
+      
+      # TODO Create views once
+      view = new FlipView(
+        model: new ForecastPageModel(model: @forecastModel)
+        currentTime: @currentTime
+        viewFactory: (page) -> new WeatherView(symbol: page.symbol.id) if page?
+      )
+      view.setElement($('#view-symbol')).render()
+
+      tempView = new ValueView(
+        model: new InterpolatedModel(model: @forecastModel)
+        currentTime: @currentTime
+        key: 'temperature'
+      )
+      tempView.setElement($('#view-temperature')).render()

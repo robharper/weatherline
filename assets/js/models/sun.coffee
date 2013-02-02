@@ -22,8 +22,9 @@ define ['_', './model', 'util/celeste'], (_, Model, Celeste) ->
     # Sets or gets the current observer's position in lat/lon
     observer: (newValues) ->
       if newValues?
-        @longitude = newValues.longitude
-        @latitude = newValues.latitude
+        @longitude = newValues.lon
+        @latitude = newValues.lat
+        @trigger('change', @)
         @
       else
         { latitude: @latitude, longitude: @longitude }

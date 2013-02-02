@@ -12,6 +12,8 @@ define ['./view', 'util/fn', 'util/color'], (View, Fn, Color) ->
       options = _.defaults(options || {}, @DEFAULTS)
       
       @sun = options.model
+      @sun.on('change', @render, @)
+
       @currentTime = options.currentTime
       @currentTime.on('change', @render, @)
 
@@ -21,6 +23,7 @@ define ['./view', 'util/fn', 'util/color'], (View, Fn, Color) ->
 
     dispose: () ->
       @currentTime.off(null, null, @)
+      @sun.off(null, null, @)
       super()
 
     render: () ->
