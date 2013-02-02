@@ -28,6 +28,14 @@ define (require) ->
       @currentTime = new CurrentTime()
       @sun = new Sun(longitude: -79, latitude: 43)
 
+    location: (cb) ->
+      if navigator.geolocation
+        navigator.geolocation.getCurrentPosition (position) ->
+          cb(position.coords.latitude, position.coords.longitude)
+      else
+        # XXX No geolocation fix to Toronto
+        cb(43, -79)
+      
     start: () ->
       mainEl = $('#main')
 
@@ -61,19 +69,24 @@ define (require) ->
       timeView = new TimeView( id: "time-view", format: "HH:mm:ss", currentTime: @currentTime )
       timeView.setElement($('#view-time')).render()
 
-      $.ajax(
-        url: '/weather'
-      ).done (data) =>
-        view = new FlipView(
-          model: new ForecastPageModel(pages: data.periods)
-          currentTime: @currentTime
-          viewFactory: (page) -> new WeatherView(symbol: page.symbol) if page?
-        )
-        view.setElement($('#view-symbol')).render()
+      # TODO Create view immediately, make model load data and notify when ready
+      @location (lat, lon) =>
+        $.ajax(
+          url: '/weather'
+          data:
+            lat: lat
+            lon: lon
+        ).done (data) =>
+          view = new FlipView(
+            model: new ForecastPageModel(pages: data.periods)
+            currentTime: @currentTime
+            viewFactory: (page) -> new WeatherView(symbol: page.symbol) if page?
+          )
+          view.setElement($('#view-symbol')).render()
 
-        tempView = new ValueView(
-          model: new InterpolatedModel(points: data.points)
-          currentTime: @currentTime
-          key: 'temperature'
-        )
-        tempView.setElement($('#view-temperature')).render()
+          tempView = new ValueView(
+            model: new InterpolatedModel(points: data.points)
+            currentTime: @currentTime
+            key: 'temperature'
+          )
+          tempView.setElement($('#view-temperature')).render()

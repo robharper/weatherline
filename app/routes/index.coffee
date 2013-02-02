@@ -10,6 +10,11 @@ exports.index = (req, res) ->
 # Simple endpoint returns formatted weather data
 exports.weather = (req, res) ->
 
+  lat = req.query["lat"]
+  lon = req.query["lon"]
+  
+  return res.send('Requires lat and lon', 400) unless lat? and lon?
+
   # Generate JSON to return
   generateResult = (error, json) ->
     result =
@@ -39,7 +44,7 @@ exports.weather = (req, res) ->
       result.points.push(
         time: record.$.from,
         temperature: record.location?[0].temperature?[0].$
-        temperature: record.location?[0].temperature?[0].$
+        humidity: record.location?[0].humidity?[0].$
       )
     )
 
@@ -49,7 +54,7 @@ exports.weather = (req, res) ->
   json = {};
   http.request({
     host: 'api.yr.no',
-    path: '/weatherapi/locationforecast/1.8/?lat=43&lon=-79'
+    path: "/weatherapi/locationforecast/1.8/?lat=#{lat}&lon=#{lon}"
   }, (response) ->
     str = ''
     response.on('data', (chunk) -> str += chunk )
