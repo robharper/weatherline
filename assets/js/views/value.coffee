@@ -7,6 +7,7 @@ define ['handlebars','./view'], (Handlebars, View) ->
 
     template: Handlebars.compile("""
       <h2>
+        <span class="sign">{{#if negative}}-{{/if}}</span>
         <span class="value">{{value}}</span>
         <span class="unit">&deg;C</span>
       </h2>
@@ -23,7 +24,8 @@ define ['handlebars','./view'], (Handlebars, View) ->
       value = @model.getValue(@currentTime, @key)
       if value?
         @$el.html( @template(
-          value: value.toFixed(1) 
+          negative: value < 0
+          value: Math.abs(value).toFixed(0) 
         ) )
       else
         @$el.empty()
