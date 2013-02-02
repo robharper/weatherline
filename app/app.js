@@ -31,6 +31,7 @@ app.use(express.methodOverride());
 app.use(app.router);
 
 if( app.get('env') == 'development' ) {
+  console.log("-=-=-= Development Environment =-=-=-");
   app.use(express.errorHandler());
 
   app.use(compiler({

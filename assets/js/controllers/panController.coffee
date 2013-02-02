@@ -50,11 +50,9 @@ define ['$', '_', 'util/domevents'], ($, _, DomEvents) ->
         distance = x - @move.x
 
         # If two fingers, double the pan effect
-        if ev.originalEvent.touches?.length > 1
-          distance = distance * @settings.fastPanSpeed
-        else
-          distance = distance * @settings.slowPanSpeed
-
+        rate = if ev.originalEvent.touches?.length > 1 then @settings.fastPanSpeed else @settings.slowPanSpeed
+        distance *= rate
+        
         @model.setTime( @move.time - distance )
 
         if @move.lastTime and ev.timeStamp != @move.lastTime

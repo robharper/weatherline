@@ -3,15 +3,16 @@ Weatherline
 > A tactile meteoroligical timeline web app
 
 
-
 ### Setup / Installation
 Requires node.js and npm, run:
+
     npm install
-    node app
+    cake start
 
 ### To Do
 
+ - Model dispose unhooking chained listeners
  - Styling
  - Responsive
- - Location aware (and controllable)
- - Proper weather request + caching
+ - Location controllable
+ - Proper weather request caching
