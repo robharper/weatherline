@@ -59,10 +59,8 @@ define ['./view', 'util/color'], (View, Color) ->
 
       if daylight < 0.5 
         color1 = Color.colorLerp(@nightColor, @setColor, daylight/0.5)
-        @$el.addClass("night").removeClass("day")
       else
         color1 = Color.colorLerp(@setColor, @dayColor, (daylight-0.5)/0.5)
-        @$el.addClass("day").removeClass("night")
 
       color2 = Color.colorLerp(@nightColorTop, @dayColorTop, zenithDaylight)
 

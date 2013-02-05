@@ -58,6 +58,9 @@ define (require) ->
       )
 
 
+      @currentTime.on('change', @modeChange, @)
+      @modeChange()
+
       skyView = new SkyView(
         model: @sun
         currentTime: @currentTime
@@ -73,14 +76,21 @@ define (require) ->
         model: new FixedPage(pageSize: "day")
         currentTime: @currentTime
         viewFactory: (page) ->
-          new TimeView( format: "MMM Do, YYYY", currentTime: page.begin )
+          new TimeView( format: "MMM D, YYYY", currentTime: page.begin )
       )
       dateView.setElement($('#view-date')).render()
 
-      timeView = new TimeView( id: "time-view", format: "HH:mm:ss", currentTime: @currentTime )
+      timeView = new TimeView( id: "time-view", format: "HH:mm", currentTime: @currentTime )
       timeView.setElement($('#view-time')).render()
 
       @determineLocation( @setLocation )
+
+    modeChange: () =>
+      daylight = @sun.percentDaylight(@currentTime)
+      if daylight < 0.5 
+        $('body').addClass("night").removeClass("day")
+      else
+        $('body').addClass("day").removeClass("night")
 
     setLocation: (lat, lon) =>
       @sun.observer(lat: lat, lon: lon)

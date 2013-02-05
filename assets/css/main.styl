@@ -48,14 +48,19 @@ body {
 @import "views/pageFlip";
 @import "views/sky";
 @import "views/satellites";
+@import "views/footer";
 @import "weather";
 @import "font-awesome";
 
-.day {
+.context {
+  -webkit-transition: color ease 0.5s;
+}
+
+.day .context {
   color: #333;
 }
 
-.night {
+.night .context {
   color: white;
 }
 
@@ -105,14 +110,9 @@ footer {
   left: 0;
   right: 0;
 
-  -webkit-transition: all ease 0.5s;
   max-height: 40px;
-  background: transparent;
-
   &.open {
     max-height: 200px;
-    background: rgba(255,255,255,0.5);
-    box-shadow: 0px -2px 3px rgba(0,0,0,0.2);
   }
 }
 
@@ -138,32 +138,5 @@ footer {
     vertical-align: text-top;
     position: absolute;
     font-weight: normal;
-  }
-}
-footer { 
-  color: #333;
-
-  .reveal {
-    font-size: 2.5rem;
-    text-align: center;
-    padding: 5px 0;
-    span {
-      display: inline-block;
-      -webkit-transition: -webkit-transform ease 0.1s;
-    }
-  }
-  .toolbar {
-    text-align: center;
-    span {
-      display: inline-block;
-      width: 7rem;
-      font-size: 4rem;
-    }
-  }
-
-  &.open {
-    .reveal span {
-      -webkit-transform: rotate(180deg);
-    }
   }
 }

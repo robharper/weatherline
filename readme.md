@@ -14,5 +14,6 @@ Requires node.js and npm, run:
  - Model dispose unhooking chained listeners
  - Styling
  - Responsive
+ - Info modal
  - Location controllable
  - Proper weather request caching
